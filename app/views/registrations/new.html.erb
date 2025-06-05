@@ -1,0 +1,56 @@
+<div class="container my-5">
+  <div class="card shadow-lg mx-auto" style="max-width: 700px; border-radius: 12px;">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center" style="font-weight: bold; color: #2c3e50;">Sign Up</h2>
+
+      <%= form_with model: @user, url: sign_up_path, local: true do |form| %>
+        <% if form.object.errors.any? %>
+          <div class="alert alert-danger">
+            <h5>There were some errors:</h5>
+            <ul>
+              <% form.object.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= form.label :username, class: "form-label" %>
+          <%= form.text_field :username, class: "form-control", placeholder: "johndoe" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :phone, class: "form-label" %>
+          <%= form.text_field :phone, class: "form-control", placeholder: "1234567890" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :email, class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", placeholder: "john@doe.com" %>
+          <div class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :role, class: "form-label" %>
+          <%= form.select :role, ["Customer", "Provider"], {}, class: "form-select" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :password, class: "form-label" %>
+          <%= form.password_field :password, class: "form-control", placeholder: "password" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :password_confirmation, class: "form-label" %>
+          <%= form.password_field :password_confirmation, class: "form-control", placeholder: "password" %>
+        </div>
+
+        <div class="text-center mt-4">
+          <%= form.submit "Sign Up", class: "btn btn-success px-4" %>
+          <%= link_to "Cancel", root_path, class: "btn btn-secondary ms-3" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

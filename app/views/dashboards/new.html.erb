@@ -1,0 +1,77 @@
+
+<div class="container my-5" style="max-width: 900px;">
+  <div class="row shadow rounded" style="min-height: 300px; background: #ffffff;">
+    
+    <div class="col-md-4 bg-primary text-white rounded-start d-flex flex-column p-4">
+      <h3 class="mb-4" style="font-weight: 700;">Dashboard Menu</h3>
+      <nav class="nav flex-column">
+
+        <% if Current.user.role=='Provider' %>
+
+        
+
+        <%= link_to "My Rental Stations" , dashboard_rental_stations_path ,class: "nav-link text-white py-2 px-3 rounded mb-2" ,style: "background: #0d6efd;"  %>
+
+        
+        <%= link_to "My Vehicles", dashboard_my_vehicles_path , class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
+
+        <a href="#" class="nav-link text-white py-2 px-3 rounded mb-2" style="background: #0d6efd;">All Bookings</a>
+
+        <% else %>
+        
+        <a href="#" class="nav-link text-white py-2 px-3 rounded mb-2" style="background: #0d6efd;">Rental History</a>
+
+
+        <% end %>
+        
+
+        <%= link_to "Change Password",edit_password_path, class:"nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
+      </nav>
+    </div>
+
+    <div class="col-md-8 p-5">
+      <h1 class="mb-4" style="color: #343a40; font-weight: 700;">Welcome back, <span style="color:#0d6efd;"><%= Current.user.username if Current.user %> 👋</span></h1>
+      <p class="lead" style="color: #6c757d;">
+        Here's a quick overview of your activities. Use the menu to navigate through your dashboard.
+      </p>
+
+      <div class="row mt-4">
+        <div class="col-sm-6 mb-3">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title">Total Bookings</h5>
+              <p class="display-5 text-primary">3</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title">Upcoming Bookings</h5>
+              <p class="display-5 text-success">5</p>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4 d-flex justify-content-center">
+        <div class="col-sm-6 mb-3">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title">Your Rating</h5>
+              <p class="display-5 text-success">4.5⭐</p>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .hover-bg-light:hover {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    transition: background-color 0.3s ease;
+  }
+</style>

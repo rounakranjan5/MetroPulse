@@ -1,0 +1,47 @@
+<div class="container my-5">
+  <h2 class="mb-4 text-primary fw-bold">My Vehicles</h2>
+ 
+    <% if @stations.any? %>
+    <div class="mb-3">
+      <% @stations.each do |station| %>
+        <%= link_to "Add Vehicle to #{station.name}", new_rental_station_vehicle_path(station), class: "btn btn-success mb-2 me-2" %>
+      <% end %>
+    </div>
+  <% end %>
+   
+  <% if @vehicles.any? %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @vehicles.each do |vehicle| %>
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0">
+            <% if vehicle.image_url.present? %>
+              <img src="<%= vehicle.image_url %>" class="card-img-top" alt="<%= vehicle.name %>" style="height: 180px; object-fit: cover; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;">
+            <% else %>
+              <img src="https://via.placeholder.com/400x180?text=No+Image" class="card-img-top" alt="No image" style="height: 180px; object-fit: cover;">
+            <% end %>
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="card-title text-dark fw-bold"><%= vehicle.name %></h5>
+                <p class="card-text mb-1"><strong>Condition:</strong> <%= vehicle.condition %></p>
+                <p class="card-text mb-2"><strong>Station:</strong> <%= vehicle.rental_station.name %></p>
+                <p class="card-text mb-2"><strong>Price:</strong> <%= vehicle.price_per_hour %>₹/hour</p>
+                <%= form_with model: [vehicle.rental_station, vehicle], url: rental_station_vehicle_path(vehicle.rental_station, vehicle), method: :patch, local: true do |f| %>
+                  <div class="input-group input-group-sm">
+                    <%= f.select :rental_station_id, @stations.map { |s| [s.name, s.id] }, { selected: vehicle.rental_station_id }, class: "form-select" %>
+                    <button class="btn btn-outline-secondary" type="submit">Move</button>
+                  </div>
+                <% end %>
+              </div>
+              <div class="mt-3 d-flex gap-2">
+                <%= link_to "Edit", edit_rental_station_vehicle_path(vehicle.rental_station, vehicle), class: "btn btn-primary btn-sm flex-fill" %>
+                <%= button_to "Delete", delete_rental_station_vehicle_path(vehicle.rental_station, vehicle), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm flex-fill" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-info mt-4">You have no vehicles.</div>
+  <% end %>
+</div>

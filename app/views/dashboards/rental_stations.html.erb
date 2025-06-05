@@ -1,0 +1,44 @@
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">My Rental Stations</h1>
+    <%= link_to "Add New Station", new_rental_station_path, class: "btn btn-success" %>
+  </div>
+
+  <% if @rental_stations.any? %>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      <% @rental_stations.each do |station| %>
+        <div class="col">
+          <div class="card shadow-sm border-0 h-100">
+            <% if station.image_url.present? %>
+              <img src="<%= station.image_url %>" class="card-img-top" alt="<%= station.name %> image" style="max-height: 250px; object-fit: cover; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;">
+            <% else %>
+              <img src="https://via.placeholder.com/600x250?text=No+Image" class="card-img-top" alt="Placeholder image" style="max-height: 250px; object-fit: cover;">
+            <% end %>
+
+            <div class="card-body">
+              <h5 class="card-title fw-bold text-dark"><%= station.name %></h5>
+              <p class="card-text mb-2"><strong>City:</strong> <%= station.city %></p>
+              <p class="card-text mb-2"><strong>Type:</strong> <%= station.station_type %></p>
+              <p class="card-text mb-3"><strong>Status:</strong> <span class="badge bg-<%= station.status == 'Active' ? 'success' : 'secondary' %>"><%= station.status %></span></p>
+
+              <div class="d-flex justify-content-between">
+                
+
+
+        <% if station.user_id == Current.user.id %>
+          <%= button_to "Delete", rental_station_path(station), method: :delete, class: "btn btn-outline-danger btn-sm" %>
+          <%= link_to "Edit", edit_rental_station_path(station), class: "btn btn-primary btn-sm me-2" %>
+
+        <% end %>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">You haven't added any rental stations yet.</p>
+  <% end %>
+</div>

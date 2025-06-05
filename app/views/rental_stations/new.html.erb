@@ -1,0 +1,60 @@
+<div class="container my-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 700px; border-radius: 12px;">
+        <div class="card-body">
+            <h2 class="card-title mb-4 text-center" style="font-weight: bold; color: #2c3e50;">Add New Rental Station</h2>
+
+            <%= form_with model: @rental_station, url: dashboard_rental_stations_path ,local: true do |form| %>
+            <% if @rental_station.errors.any? %>
+            <div class="alert alert-danger">
+                <h5>There were some errors:</h5>
+                <ul>
+                    <% @rental_station.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                    <% end %>
+                </ul>
+            </div>
+            <% end %>
+
+          <div class="mb-3">
+            <%= form.label :name, class: "form-label" %>
+            <%= form.text_field :name, class: "form-control" %>
+         </div>
+
+        <div class="mb-3">
+          <%= form.label :city, class: "form-label" %>
+          <%= form.select :city, [
+            'Delhi NCR', 'Bangalore', 'Pune', 'Hyderabad', 'Dehradun', 
+            'Kolkata', 'Chennai', 'Mumbai', 'Lucknow', 'Jaipur', 
+            'Ahmedabad', 'Indore', 'Goa'
+          ], {}, { class: "form-select" } %>
+        </div>
+
+            <div class="mb-3">
+                <%= form.label :station_type, "Type", class: "form-label" %>
+                <%= form.select :station_type, 
+      ["E-Scooter", "E-Bike", "Bike", "Car-Petrol", "Car-Diesel", "Car-Electric", "Scooter", "Bus"], 
+      {}, 
+      class: "form-select" %>
+            </div>
+
+
+            <div class="mb-3">
+                <%= form.label :status, class: "form-label" %>
+                <%= form.select :status, ["Active", "Inactive"], {}, class: "form-select" %>
+            </div>
+
+            <div class="mb-3">
+  <%= form.label :image_url, "Image URL", class: "form-label" %>
+  <%= form.text_field :image_url, class: "form-control", placeholder: "https://example.com/station.jpg" %>
+  <small class="form-text text-muted">Upload a JPG, JPEG, or PNG image URL.</small>
+</div>
+
+
+            <div class="text-center">
+                <%= form.submit "Create Station", class: "btn btn-success px-4" %>
+                <%= link_to "Cancel", dashboard_rental_stations_path, class: "btn btn-secondary ms-3" %>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>
