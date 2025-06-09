@@ -15,4 +15,7 @@ class DashboardsController < ApplicationController
       @stations = RentalStation.where(user_id: Current.user.id)
   end
 
+  def all_bookings
+  @bookings = Booking.where("customer_id = ? OR provider_id = ?", Current.user.id, Current.user.id)
+end
 end

@@ -1,0 +1,91 @@
+<div class="container my-5">
+  <h1 class="mb-4">All Bookings</h1>
+  
+  <div class="mb-4">
+    <%= link_to "Pending", all_bookings_path(filter: "pending"), 
+                class: "btn btn-outline-warning #{params[:filter] == 'pending' || params[:filter].blank? ? 'active' : ''}" %>
+    <%= link_to "Accepted", all_bookings_path(filter: "accepted"), 
+                class: "btn btn-outline-primary #{params[:filter] == 'accepted' ? 'active' : ''}" %>
+    <%= link_to "Completed", all_bookings_path(filter: "completed"), 
+                class: "btn btn-outline-success #{params[:filter] == 'completed' ? 'active' : ''}" %>
+    <%= link_to "Canceled", all_bookings_path(filter: "canceled"), 
+                class: "btn btn-outline-danger #{params[:filter] == 'canceled' ? 'active' : ''}" %>
+  </div>
+
+  <% bookings = 
+     case params[:filter]
+     when "completed"
+       @bookings.completed
+     when "accepted"
+       @bookings.accepted
+     when "canceled"
+       @bookings.canceled
+     else
+       @bookings.pending
+     end
+  %>
+
+  <% if bookings.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Vehicle Image</th>
+          <th>Vehicle</th>
+          <th>Station</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Booking Date</th>
+          <th>Duration</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bookings.each do |booking| %>
+          <tr>
+            <td>
+              <% if booking.vehicle&.image_url.present? %>
+                <img src="<%= booking.vehicle.image_url %>" alt="<%= booking.vehicle_type %>" class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;">
+              <% else %>
+                <img src="https://via.placeholder.com/80x60?text=No+Image" alt="No image" class="img-thumbnail">
+              <% end %>
+            </td>
+            <td><%= booking.vehicle_type %></td>
+            <td><%= booking.rental_station.name %></td>
+            <td><%= booking.rental_station.city || "N/A" %></td>
+            <td>
+              <% if booking.status == "pending" %>
+                <span class="badge bg-warning text-dark">Pending</span>
+              <% elsif booking.status == "accepted" %>
+                <span class="badge bg-primary">Accepted</span>
+              <% elsif booking.status == "completed" %>
+                <span class="badge bg-success">Completed</span>
+              <% elsif booking.status == "canceled" %>
+                <span class="badge bg-danger">Canceled</span>
+              <% end %>
+            </td>
+            <td><%= booking.booking_date.strftime("%d %b %Y") if booking.booking_date %></td>
+            <td><%= booking.duration %> hour(s)</td>
+            <td>₹<%= booking.price %></td>
+            <td>
+              <% if booking.status == "pending" && booking.provider_id == Current.user.id %>
+                <div class="d-flex gap-2">
+                <%= button_to "Accept", accept_booking_path(booking), method: :post, class: "btn btn-primary btn-sm" %>
+                 <%= button_to "Cancel", cancel_booking_path(booking), method: :post, 
+                              class: "btn btn-danger btn-sm" %>
+                </div>
+              <% elsif booking.status == "accepted" && booking.customer_id == Current.user.id %>
+                <%= button_to "Complete Ride", complete_booking_path(booking), method: :post, class: "btn btn-success btn-sm" %>
+              <% elsif booking.status == "pending" %>
+                <%= button_to "Cancel", cancel_booking_path(booking), method: :post, 
+                              class: "btn btn-danger btn-sm" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-muted">No bookings found for this filter.</p>
+  <% end %>
+</div>

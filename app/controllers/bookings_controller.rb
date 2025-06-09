@@ -1,0 +1,50 @@
+class BookingsController < ApplicationController
+  before_action :require_user_logged_in!
+  
+  def create
+    vehicle_id = params[:vehicle_id]
+    @vehicle = Vehicle.find(vehicle_id)
+    @station = @vehicle.rental_station
+    
+    if @vehicle.available && @station.status == "Active"
+      @booking = Booking.create!(
+        vehicle_id: @vehicle.id,
+        rental_station_id: @station.id,
+        customer_id: Current.user.id,
+        provider_id: @station.user_id,
+        vehicle_type: @vehicle.name,
+        duration: params[:duration] || 1,
+        price: @vehicle.price_per_hour,
+        booking_date: Date.current,
+        status: "pending"
+      )
+      
+      @vehicle.update(available: false)
+      redirect_to all_bookings_path, notice: "Booking requested!"
+    else
+      redirect_to rental_station_vehicles_path(@station), alert: "Vehicle not available."
+    end
+  end
+  
+  def accept
+    @booking = Booking.find(params[:id])
+    @booking.update(status: "accepted")
+    redirect_to all_bookings_path, notice: "Booking accepted."
+  end
+  
+  def complete
+    @booking = Booking.find(params[:id])
+    @booking.update(status: "completed")
+    vehicle = Vehicle.find(@booking.vehicle_id)
+    vehicle.update(available: true)
+    redirect_to all_bookings_path, notice: "Ride completed."
+  end
+  
+  def cancel
+    @booking = Booking.find(params[:id])
+    @booking.update(status: "canceled")
+    vehicle = Vehicle.find(@booking.vehicle_id)
+    vehicle.update(available: true)
+    redirect_to all_bookings_path, notice: "Booking canceled."
+  end
+end
