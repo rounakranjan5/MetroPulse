@@ -1,6 +1,7 @@
 class VehiclesController < ApplicationController
     
     before_action :require_user_logged_in!
+    before_action :require_provider!, except: [:index]
 
     def index 
         @station = RentalStation.find(params[:id])

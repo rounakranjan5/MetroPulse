@@ -1,6 +1,7 @@
 class DashboardsController < ApplicationController
     before_action :require_user_logged_in!
 
+    before_action :require_provider!, except: [ :all_bookings, :new]
 
     def new 
         @user = Current.user

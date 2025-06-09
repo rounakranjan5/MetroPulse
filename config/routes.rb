@@ -42,15 +42,12 @@ Rails.application.routes.draw do
 
   get "/dashboard/my_vehicles", to: "dashboards#my_vehicles", as: "dashboard_my_vehicles"
 
-  # Booking creation
   post "/vehicles/:vehicle_id/bookings", to: "bookings#create", as: "create_vehicle_booking"
 
-  # Booking actions
   post "/bookings/:id/accept", to: "bookings#accept", as: "accept_booking"
   post "/bookings/:id/complete", to: "bookings#complete", as: "complete_booking"
   post "/bookings/:id/cancel", to: "bookings#cancel", as: "cancel_booking"
 
-  # Booking dashboard
   get "/dashboard/all_bookings", to: "dashboards#all_bookings", as: "all_bookings"
 
   root to:"main#index"

@@ -1,5 +1,6 @@
 class BookingsController < ApplicationController
   before_action :require_user_logged_in!
+  before_action :require_customer! , except: [:accept, :complete, :cancel]
   
   def create
     vehicle_id = params[:vehicle_id]

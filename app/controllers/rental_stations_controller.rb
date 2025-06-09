@@ -2,6 +2,7 @@ class RentalStationsController < ApplicationController
 
 
   before_action :require_user_logged_in! 
+  before_action :require_provider!, except: [ :all]
   def new
     @rental_station = RentalStation.new
   end

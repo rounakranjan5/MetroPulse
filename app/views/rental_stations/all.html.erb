@@ -1,7 +1,9 @@
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="text-primary">All Rental Stations</h1>
+    <% if Current.user && Current.user.role=='Provider'%>
     <%= link_to "Add New Station", new_rental_station_path, class: "btn btn-success" %>
+    <% end %>
   </div>
 
   <% if @rental_stations.any? %>
