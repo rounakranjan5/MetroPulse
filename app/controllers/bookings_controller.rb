@@ -8,20 +8,30 @@ class BookingsController < ApplicationController
     @station = @vehicle.rental_station
     
     if @vehicle.available && @station.status == "Active"
+
+      duration = params[:duration].to_i
+      booking_slot = params[:booking_slot]
+      
+      
       @booking = Booking.create!(
         vehicle_id: @vehicle.id,
         rental_station_id: @station.id,
         customer_id: Current.user.id,
         provider_id: @station.user_id,
         vehicle_type: @vehicle.name,
-        duration: params[:duration] || 1,
-        price: @vehicle.price_per_hour,
+        duration: duration,
+        price: @vehicle.price_per_hour * duration,
         booking_date: Time.zone.now,
+        booking_slot: booking_slot,
         status: "pending"
       )
       
-      @vehicle.update(available: false)
-      redirect_to all_bookings_path, notice: "Booking requested!"
+      if @booking.persisted?
+        @vehicle.update(available: false)
+        redirect_to all_bookings_path, notice: "Booking requested for #{booking_slot}!"
+      else
+        redirect_to rental_station_vehicles_path(@station), alert: "Error creating booking."
+      end
     else
       redirect_to rental_station_vehicles_path(@station), alert: "Vehicle not available."
     end

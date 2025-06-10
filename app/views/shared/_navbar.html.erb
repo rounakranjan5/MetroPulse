@@ -26,6 +26,11 @@
 
           <% elsif Current.user && Booking.where(customer_id: Current.user.id, status: "pending").any? %>
             <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.55rem;margin-left:-0.5rem;"></i>
+
+          <% elsif Current.user && Booking.where(customer_id: Current.user.id, status: "accepted").any? %>
+            <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.55rem;margin-left:-0.5rem;"></i>
+          
+          
         <% end %>
         </div>
         </li>
