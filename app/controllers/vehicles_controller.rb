@@ -1,6 +1,7 @@
 class VehiclesController < ApplicationController
     
     before_action :require_user_logged_in!
+    before_action :require_provider!, except: [:index]
 
     def index 
         @station = RentalStation.find(params[:id])
@@ -54,7 +55,7 @@ class VehiclesController < ApplicationController
     private
 
     def vehicle_params
-        params.require(:vehicle).permit(:name, :condition, :image_url, :rental_station_id, :price_per_hour)
+        params.require(:vehicle).permit(:name, :condition, :image_url, :rental_station_id, :price_per_hour,:available)
     end
 
 
