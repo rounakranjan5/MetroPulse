@@ -20,12 +20,14 @@
               <div>
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title text-dark fw-bold"><%= vehicle.name %></h5>
-                <% if vehicle.available && Current.user.role=='Customer' %>
+                <% if vehicle.available && Current.user.role=='Customer' && @station.status=='Active' %>
 
                 
 
 
                   <%= button_to "Book Now", create_vehicle_booking_path(vehicle), method: :post, class: "btn btn-success" %>
+                <% elsif @station.status!='Active' && Current.user.role=='Customer' %>
+                  <span class="badge bg-secondary">Station Inactive</span>
                 <% elsif !vehicle.available && Current.user.role=='Customer'%>
                   <% booking = Booking.find_by(vehicle_id: vehicle.id, status: "pending") %>
                   
@@ -39,7 +41,13 @@
                 <% end %>
               </div>
                 <p class="card-text text-muted"><strong>Condition:</strong> <%= vehicle.condition %></p>
-                <p class="card-text text-muted"><strong>Availability Status :</strong> <%= vehicle.available %></p>
+                <p class="card-text text-muted"><strong>Availability Status :</strong>
+                 <% if vehicle.available %>
+                  <span class="badge bg-success">Available</span>
+                  <% else %>
+                  <span class="badge bg-danger">Not Available</span>
+                  <% end %>
+                 </p>
                 <p class="card-text text-muted"><strong>Price:</strong> <%= vehicle.price_per_hour %>₹/hour</p>
               </div>
               <% if @station.user_id == Current.user.id %>

@@ -5,6 +5,13 @@ class DashboardsController < ApplicationController
 
     def new 
         @user = Current.user
+        if Current.user.role == 'Provider'
+        @completed_rentals = Booking.where(provider_id: Current.user.id, status: "completed")
+        @upcoming_bookings = Booking.where(provider_id: Current.user.id, status: "accepted")
+    else
+        @completed_rentals = Booking.where(customer_id: Current.user.id, status: "completed")
+        @upcoming_bookings = Booking.where(customer_id: Current.user.id, status: "accepted")
+    end
     end
 
     def rental_stations
