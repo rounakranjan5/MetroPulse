@@ -28,8 +28,10 @@
                 <% if vehicle.available && Current.user.role=='Customer' %>
                 
                   <%= button_to "Book Now", create_vehicle_booking_path(vehicle), method: :post, class: "btn btn-success" %>
-                <% else %>
+                <% elsif !vehicle.available && Current.user.role=='Customer' %>
                   <span class="badge bg-danger">Booked Out</span>
+                <% elsif !vehicle.available && Current.user.role=='Provider' %>
+                    <span class="badge bg-danger">Booked Out</span>
                 <% end %>
 
                 

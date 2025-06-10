@@ -64,7 +64,12 @@
                 <span class="badge bg-danger">Canceled</span>
               <% end %>
             </td>
-            <td><%= booking.booking_date.strftime("%d %b %Y") if booking.booking_date %></td>
+            <td>
+  <% if booking.booking_date %>
+    <%= booking.booking_date.to_time.in_time_zone('Asia/Kolkata').strftime("%d %b %Y %I:%M %p") %>
+  <% end %>
+</td>
+
             <td><%= booking.duration %> hour(s)</td>
             <td>₹<%= booking.price %></td>
             <td>

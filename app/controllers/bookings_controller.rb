@@ -16,7 +16,7 @@ class BookingsController < ApplicationController
         vehicle_type: @vehicle.name,
         duration: params[:duration] || 1,
         price: @vehicle.price_per_hour,
-        booking_date: Date.current,
+        booking_date: Time.zone.now,
         status: "pending"
       )
       

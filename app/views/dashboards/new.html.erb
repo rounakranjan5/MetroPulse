@@ -35,7 +35,9 @@
         <% end %>
         </div>
 
-        <a href="#" class="nav-link text-white py-2 px-3 rounded mb-2" style="background: #0d6efd;">Rental History</a>
+      
+
+        <%= link_to "Rental History" , rental_history_path ,class: "nav-link text-white py-2 px-3 rounded mb-2" , style: "background: #0d6efd;" %>
 
         <%= link_to "Change Password",edit_password_path, class:"nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
       </nav>

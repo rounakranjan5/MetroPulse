@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_09_070856) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_10_044607) do
   create_table "bookings", force: :cascade do |t|
     t.string "vehicle_type"
     t.integer "duration"
     t.decimal "price"
-    t.date "booking_date"
+    t.datetime "booking_date"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

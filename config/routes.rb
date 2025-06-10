@@ -50,5 +50,7 @@ Rails.application.routes.draw do
 
   get "/dashboard/all_bookings", to: "dashboards#all_bookings", as: "all_bookings"
 
+  get "/dashboard/rental_history" , to: "rental_history#show", as: "rental_history" 
+
   root to:"main#index"
 end
