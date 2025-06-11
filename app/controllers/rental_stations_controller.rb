@@ -20,6 +20,30 @@ class RentalStationsController < ApplicationController
 
   def all
     @rental_stations = RentalStation.all
+    
+    if params[:search].present?
+      search_term = "%#{params[:search].strip}%"
+      @rental_stations = @rental_stations.where(
+        "LOWER(name) LIKE ? OR LOWER(city) LIKE ? OR LOWER(station_type) LIKE ?", 
+        search_term.downcase, search_term.downcase, search_term.downcase
+      )
+    end
+
+    
+    
+    if params[:filter].present?
+      @rental_stations = @rental_stations.where(station_type: params[:filter])
+    end
+    
+    if params[:status].present?
+      @rental_stations = @rental_stations.where(status: params[:status])
+    end
+
+    if params[:city].present?
+      @rental_stations = @rental_stations.where(city: params[:city])
+    end
+    
+    @rental_stations = @rental_stations.order(created_at: :asc)
   end
   
   def destroy

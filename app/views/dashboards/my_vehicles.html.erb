@@ -8,6 +8,95 @@
       <% end %>
     </div>
   <% end %>
+
+  <div class="card mb-4  border-0">
+        <div class="card-body">
+            <%= form_with url: dashboard_my_vehicles_path, method: :get, class: "row g-3", data: { turbo: false } do |f| %>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: "Search by name or condition" %>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <%= f.select :condition, 
+            [
+              ['Any Conditions', ''],
+             ['Brand New < 1 year Used', 'Brand New < 1 year Used'],
+             ['New 2-4 Year Used', 'New 2-4 Year Used'],
+             ['Mid 5-7 Years Used', 'Mid 5-7 Years Used'],
+             ['Old > 7 years Old', 'Old > 7 years Old'],
+            ],
+            { selected: params[:condition] },
+            { class: "form-select" }
+          %>
+            </div>
+            <div class="col-md-2">
+                <%= f.select :status, 
+            [
+              ["All Status", ""],
+              ["Available", "Available"],
+              ["Booked Out", "false"]
+            ],
+            { selected: params[:status] },
+            { class: "form-select" }
+          %>
+            </div>
+
+          <div class="col-md-2">
+            <div class="input-group mb-3">
+              <span class="input-group-text">₹</span>
+              <%= number_field_tag :min_price, params[:min_price], class: "form-control", placeholder: "Min Price" %>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="input-group mb-3">
+              <span class="input-group-text">₹</span>
+              <%= number_field_tag :max_price, params[:max_price], class: "form-control", placeholder: "Max Price" %>
+            </div>
+          </div>
+
+
+            
+            <div class="col-md-1">
+                <div class="d-grid">
+                    <%= f.submit "Search", class: "btn btn-dark" %>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+
+    <% if params[:search].present? || params[:condition].present? || params[:status].present? || params[:min_price].present? || params[:max_price].present? %>
+    <div class="alert alert-info mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                Showing <%= @vehicles.count %> search results
+                <% if params[:search].present? %>
+                for "<%= params[:search] %>"
+                <% end %>
+                <% if params[:condition].present? %>
+                in <%= params[:condition] %>
+                <% end %>
+               
+                <% if params[:status].present? %>
+                with status <%= params[:status] %>
+                <% end %>
+
+                <% if params[:min_price].present? && params[:max_price].present? %>
+                with price per Hour in between ₹<%= params[:min_price] %> and ₹<%= params[:max_price] %>
+                <% elsif params[:min_price].present? %>
+                with min price per Hour ₹<%= params[:min_price] %>
+                <% elsif params[:max_price].present? %>
+                with max price per Hour ₹<%= params[:max_price] %>
+                <% end %>
+                
+            </div>
+            <%= link_to "Clear Search", dashboard_my_vehicles_path, class: "btn btn-sm btn-outline-primary" %>
+        </div>
+    </div>
+    <% end %>
    
   <% if @vehicles.any? %>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

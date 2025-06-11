@@ -1,7 +1,72 @@
 <div class="container my-5">
   <h1 class="mb-4">All Bookings</h1>
+
+<div class="card mb-4  border-0">
+        <div class="card-body">
+            <%= form_with url: all_bookings_path, method: :get, class: "row g-3", data: { turbo: false } do |f| %>
+
+            <% if params[:filter].present? %>
+              <%= hidden_field_tag :filter, params[:filter] %>
+            <% end %>
+
+            <div class="col-md-4">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: "Search by vehicle name" %>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                <%= f.date_field :booking_date, value: params[:booking_date], class: "form-control", placeholder: "Filter by date" %>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <%= f.number_field :min_price, value: params[:min_price], class: "form-control", placeholder: "Min price" %>
+            </div>
+            <div class="col-md-2">
+              <%= f.number_field :max_price, value: params[:max_price], class: "form-control", placeholder: "Max price" %>
+            </div>
+
+            <div class="col-md-1">
+              <div class="d-grid">
+                <%= f.submit "Search", class: "btn btn-dark" %>
+              </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+
+    <% if params[:search].present? || params[:booking_date].present? || params[:min_price].present? || params[:max_price].present? %>
+  <div class="alert alert-info mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+ <div>
+
+        Showing <%= @filtered_bookings.count %> search results
+        <% if params[:search].present? %>
+          for "<%= params[:search] %>"
+        <% end %>
+        <% if params[:booking_date].present? %>
+          on <%= Date.parse(params[:booking_date]).strftime("%B %d, %Y") %>
+        <% end %>
+        <% if params[:min_price].present? && params[:max_price].present? %>
+        with price range in between ₹<%= params[:min_price] %> and ₹<%= params[:max_price] %>
+        <% elsif params[:min_price].present? %>
+          with min price ₹<%= params[:min_price] %>
+        <% elsif params[:max_price].present? %>
+          with max price ₹<%= params[:max_price] %>
+        <% end %>
+      </div> 
+      <%= link_to "Clear Search", all_bookings_path(filter: params[:filter]), class: "btn btn-sm btn-outline-primary" %>
+    </div>
+  </div>
+<% end %>
+
+
   
-  <div class="mb-4 d-flex gap-3">
+  <div class="mb-4 d-flex gap-3 justify-content-center">
     <%= link_to all_bookings_path(filter: "pending"), 
                 class: "btn btn-outline-warning position-relative #{params[:filter] == 'pending' || params[:filter].blank? ? 'active' : ''}" do %>
       Pending
@@ -49,6 +114,19 @@
   %>
 
   <% if bookings.any? %>
+    <div class="d-flex justify-content-end mb-3">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Sort by
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><%= link_to "Newest First", request.params.merge(sort: "date_desc"), class: "dropdown-item" %></li>
+      <li><%= link_to "Oldest First", request.params.merge(sort: "date_asc"), class: "dropdown-item" %></li>
+      <li><%= link_to "Price: High to Low", request.params.merge(sort: "price_desc"), class: "dropdown-item" %></li>
+      <li><%= link_to "Price: Low to High", request.params.merge(sort: "price_asc"), class: "dropdown-item" %></li>
+    </ul>
+  </div>
+</div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -64,7 +142,7 @@
         </tr>
       </thead>
       <tbody>
-        <% bookings.each do |booking| %>
+        <% @filtered_bookings.each do |booking| %>
           <tr>
             <td>
               <% if booking.vehicle&.image_url.present? %>

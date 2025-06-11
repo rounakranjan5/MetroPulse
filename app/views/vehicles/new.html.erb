@@ -34,7 +34,7 @@
 
          <div class="mb-3">
           <%= form.label :available, "Availability Status", class: "form-label" %>
-          <%= form.select :available, [['Available',true],['Not Available',false]], {}, class: "form-select" , required: true %>
+          <%= form.select :available, [['Available',true],['Not Available',false]],  { prompt: "Pick the availability status from the dropdown" }, class: "form-select" , required: true %>
         </div>
         
         <div class="mb-3">

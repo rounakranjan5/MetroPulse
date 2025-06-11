@@ -6,6 +6,36 @@ class VehiclesController < ApplicationController
     def index 
         @station = RentalStation.find(params[:id])
         @vehicles = @station.vehicles
+
+        if params[:search].present?
+            search_term = "%#{params[:search].strip}%"
+            @vehicles = @vehicles.where(
+              "LOWER(name) LIKE ? OR LOWER(condition) LIKE ? OR LOWER(available) LIKE ? ", 
+              search_term.downcase, search_term.downcase, search_term.downcase
+            )
+        end
+
+    
+    
+        if params[:condition].present?
+            @vehicles = @vehicles.where(condition: params[:condition])
+        end
+    
+        if params[:status].present?
+            @vehicles = @vehicles.where(available: params[:status])
+        end
+
+
+        if params[:min_price].present? && params[:max_price].present?
+            @vehicles = @vehicles.where(price_per_hour: params[:min_price]..params[:max_price])
+        elsif params[:min_price].present?
+            @vehicles = @vehicles.where("price_per_hour >= ?", params[:min_price])
+        elsif params[:max_price].present?
+            @vehicles = @vehicles.where("price_per_hour <= ?", params[:max_price])
+        end
+
+    
+        @vehicles = @vehicles.order(created_at: :asc)
         
     end
 
