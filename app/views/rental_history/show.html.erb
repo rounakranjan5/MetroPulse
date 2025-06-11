@@ -1,0 +1,53 @@
+
+<div class="container my-5">
+  <h1 class="mb-4">Rental History</h1>
+  
+  <% if @completed_rentals.any? %>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Vehicle</th>
+            <th>Station</th>
+            <th>Location</th>
+            <th>Booking Date</th>
+            <th>Time Slot</th>
+            <th>Duration</th>
+            <th>Price</th>
+            <th>Completed On</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @completed_rentals.each do |booking| %>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <% if booking.vehicle&.image_url.present? %>
+                    <img src="<%= booking.vehicle.image_url %>" alt="<%= booking.vehicle_type %>" 
+                         class="me-2" style="width: 50px; height: 40px; object-fit: cover;">
+                  <% end %>
+                  <%= booking.vehicle_type %>
+                </div>
+              </td>
+              <td><%= booking.rental_station&.name %></td>
+              <td><%= booking.rental_station&.city %></td>
+              <td><%= booking.booking_date&.strftime("%d %b %Y, %I:%M %p") %></td>
+              <td><%= booking.booking_slot %></td>
+              <td><%= booking.duration %> hour(s)</td>
+              <td>₹<%= booking.price %></td>
+              <td><%= booking.updated_at.strftime("%d %b %Y, %I:%M %p") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <p>You don't have any completed rentals yet.</p>
+    </div>
+  <% end %>
+  
+  <div class="mt-4">
+    <%= link_to "Back to Dashboard", dashboard_path, class: "btn btn-primary" %>
+  </div>
+</div>

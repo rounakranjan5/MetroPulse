@@ -1,4 +1,7 @@
 class RegistrationsController < ApplicationController
+  
+    before_action :redirect_if_authenticated
+    
     def new
         @user=User.new
     end
