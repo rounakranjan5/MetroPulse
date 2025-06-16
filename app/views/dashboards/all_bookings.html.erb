@@ -185,6 +185,14 @@
               <% elsif booking.status == "pending" %>
                 <%= button_to "Cancel", cancel_booking_path(booking), method: :post, 
                               class: "btn btn-danger btn-sm" %>
+
+              <%elsif booking.status=='completed' %>
+              
+<% if !booking.reviewed? %>
+  <%= link_to "Review", review_booking_path(booking), class: "btn btn-warning btn-sm" %>
+<% elsif booking.reviewed? %>
+  <span class="badge bg-success">Reviewed</span>
+<% end %>                
               <% end %>
             </td>
           </tr>

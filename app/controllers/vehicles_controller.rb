@@ -1,7 +1,7 @@
 class VehiclesController < ApplicationController
     
     before_action :require_user_logged_in!
-    before_action :require_provider!, except: [:index]
+    before_action :require_provider!, except: [:index,:review]
 
     def index 
         @station = RentalStation.find(params[:id])
@@ -79,6 +79,20 @@ class VehiclesController < ApplicationController
         else
             redirect_to rental_station_vehicles_path(@station), alert: "Failed to delete vehicle."
         end
+    end
+
+
+    def review
+  @vehicle = Vehicle.find(params[:id])
+  
+  @reviews = Booking.where(vehicle_id: @vehicle.id, status: "completed")
+                   .where.not(vehicle_rating: nil)
+                   .includes(:customer) 
+                   .order(reviewed_at: :desc)
+  
+  
+  @average_rating = @reviews.average(:vehicle_rating).to_f.round(1)
+  @review_count = @reviews.count
     end
 
 

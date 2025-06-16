@@ -214,6 +214,10 @@
                   <% end %>
                  </p>
                 <p class="card-text text-muted"><strong>Price:</strong> <%= vehicle.price_per_hour %>₹/hour</p>
+
+                <p class="card-text text-muted"><strong>Average Rating : </strong><%= vehicle.average_rating %>⭐(<%= vehicle.review_count %> reviews)</p>
+                <%= link_to "See All Reviews" ,vehicle_reviews_path(vehicle), class: "btn btn-warning btn-sm" %>
+
               </div>
               <% if @station.user_id == Current.user.id %>
                 <div class="mt-3 d-flex justify-content-between">

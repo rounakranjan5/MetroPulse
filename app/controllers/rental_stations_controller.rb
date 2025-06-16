@@ -2,7 +2,7 @@ class RentalStationsController < ApplicationController
 
 
   before_action :require_user_logged_in! 
-  before_action :require_provider!, except: [ :all]
+  before_action :require_provider!, except: [ :all,:review]
   def new
     @rental_station = RentalStation.new
   end
@@ -80,6 +80,22 @@ def update
   end
 end
 
+
+def review
+
+  @rental_station = RentalStation.find(params[:id])
+  
+  @reviews = Booking.where(rental_station_id: @rental_station.id, status: "completed")
+                    .where.not(station_rating: nil)
+                    .includes(:customer) 
+                    .order(reviewed_at: :desc)
+  
+  
+  @average_rating = @reviews.average(:station_rating).to_f.round(1)
+  @review_count = @reviews.count
+
+
+end
 
 
 

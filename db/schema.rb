@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_10_044607) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_16_102312) do
   create_table "bookings", force: :cascade do |t|
     t.string "vehicle_type"
     t.integer "duration"
@@ -24,6 +24,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_044607) do
     t.integer "customer_id"
     t.integer "provider_id"
     t.string "booking_slot"
+    t.integer "vehicle_rating"
+    t.text "vehicle_review"
+    t.integer "station_rating"
+    t.text "station_review"
+    t.datetime "reviewed_at"
     t.index ["rental_station_id"], name: "index_bookings_on_rental_station_id"
   end
 

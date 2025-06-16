@@ -120,7 +120,22 @@
 
                     <p class="card-text mb-2"><strong>City:</strong> <%= station.city %></p>
                     <p class="card-text mb-2"><strong>Type:</strong> <%= station.station_type %></p>
-                    <p class="card-text mb-3"><strong>Status:</strong> <span class="badge bg-<%= station.status == 'Active' ? 'success' : 'secondary' %>"><%= station.status %></span></p>
+                    <p class="card-text mb-2"><strong>Status:</strong> <span class="badge bg-<%= station.status == 'Active' ? 'success' : 'secondary' %>"><%= station.status %></span></p>
+
+                    <div class="d-flex justify-content-between mb-3">
+                    <p class="card-text mb-2"><strong>Average Rating:</strong> 
+                        <span class="text-muted"> 
+                            <% if station.average_rating.present? %>
+                            <%= station.average_rating %>⭐(<%= station.review_count %> reviews )
+                            <% else %>
+                            Not Rated
+                            <% end %>
+                        </span>
+                    </p>
+
+
+                    <%= link_to "View Reviews", station_reviews_path(station), class: "btn btn-warning btn-sm mb-2" %>
+                    </div>
 
 
 

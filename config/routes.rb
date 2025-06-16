@@ -52,5 +52,12 @@ Rails.application.routes.draw do
 
   get "/dashboard/rental_history" , to: "rental_history#show", as: "rental_history" 
 
+  get "/dashboard/all_bookings/:id/review", to: "dashboards#review", as: "review_booking"
+  post "/dashboard/bookings/:id/review", to: "dashboards#create_review", as: "create_review"
+
+  get "rental_stations/:id/vehicles/review" , to: "vehicles#review", as: "vehicle_reviews"
+  get "/rental_stations/:id/review" , to: "rental_stations#review", as: "station_reviews"
+  
+
   root to:"main#index"
 end

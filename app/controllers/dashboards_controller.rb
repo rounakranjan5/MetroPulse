@@ -1,13 +1,18 @@
 class DashboardsController < ApplicationController
     before_action :require_user_logged_in!
 
-    before_action :require_provider!, except: [ :all_bookings, :new]
+    before_action :require_provider!, except: [ :all_bookings, :new , :review,:create_review]
 
     def new 
         @user = Current.user
         if Current.user.role == 'Provider'
         @completed_rentals = Booking.where(provider_id: Current.user.id, status: "completed")
         @upcoming_bookings = Booking.where(provider_id: Current.user.id, status: "accepted")
+        
+        @count_completed_rentals = @completed_rentals.count
+        @average_rating=@completed_rentals.average(:vehicle_rating).round(1)
+  
+
     else
         @completed_rentals = Booking.where(customer_id: Current.user.id, status: "completed")
         @upcoming_bookings = Booking.where(customer_id: Current.user.id, status: "accepted")
@@ -108,5 +113,60 @@ class DashboardsController < ApplicationController
   end
   
 
-end
+  end
+
+  def review
+    @booking = Booking.find(params[:id])
+    @vehicle = Vehicle.find(@booking.vehicle_id)
+    @rental_station = RentalStation.find(@booking.rental_station_id)
+    
+    unless @booking.customer_id == Current.user.id || @booking.provider_id == Current.user.id
+      redirect_to all_bookings_path, alert: "You can only review your own bookings."
+      return
+    end
+    
+    if @booking.status != "completed"
+      redirect_to all_bookings_path, alert: "You can only review completed bookings."
+      return
+    end
+    
+    if @booking.reviewed?
+      redirect_to all_bookings_path, alert: "You have already reviewed this booking."
+      return
+    end
+  
+  end
+
+  def create_review
+    @booking = Booking.find(params[:id])
+    @vehicle = Vehicle.find(@booking.vehicle_id)
+    @rental_station = RentalStation.find(@booking.rental_station_id)
+    
+    unless @booking.customer_id == Current.user.id || @booking.provider_id == Current.user.id
+      redirect_to all_bookings_path, alert: "You can only review your own bookings."
+      return
+    end
+    
+    if @booking.status != "completed"
+      redirect_to all_bookings_path, alert: "You can only review completed bookings."
+      return
+    end
+    
+    if @booking.reviewed?
+      redirect_to all_bookings_path, alert: "You have already reviewed this booking."
+      return
+    end
+    
+    if @booking.update(review_params.merge(reviewed_at: Time.current))
+      redirect_to all_bookings_path, notice: "Thank you for your review!"
+    else
+      render :review, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def review_params
+    params.require(:booking).permit(:vehicle_rating, :vehicle_review, :station_rating, :station_review)
+  end
 end
