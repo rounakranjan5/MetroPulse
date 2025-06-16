@@ -2,6 +2,7 @@ class RentalStationsController < ApplicationController
 
 
   before_action :require_user_logged_in! 
+  before_action :require_provider!, except: [ :all]
   def new
     @rental_station = RentalStation.new
   end
@@ -18,7 +19,33 @@ class RentalStationsController < ApplicationController
   end
 
   def all
-    @rental_stations = RentalStation.all
+    @rental_stations = RentalStation.paginate(page: params[:page], per_page: 10).all
+
+
+    
+    if params[:search].present?
+      search_term = "%#{params[:search].strip}%"
+      @rental_stations = @rental_stations.where(
+        "LOWER(name) LIKE ? OR LOWER(city) LIKE ? OR LOWER(station_type) LIKE ?", 
+        search_term.downcase, search_term.downcase, search_term.downcase
+      )
+    end
+
+    
+    
+    if params[:filter].present?
+      @rental_stations = @rental_stations.where(station_type: params[:filter])
+    end
+    
+    if params[:status].present?
+      @rental_stations = @rental_stations.where(status: params[:status])
+    end
+
+    if params[:city].present?
+      @rental_stations = @rental_stations.where(city: params[:city])
+    end
+    
+    @rental_stations = @rental_stations.order(created_at: :asc)
   end
   
   def destroy
