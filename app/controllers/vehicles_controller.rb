@@ -1,10 +1,41 @@
 class VehiclesController < ApplicationController
     
     before_action :require_user_logged_in!
+    before_action :require_provider!, except: [:index,:review]
 
     def index 
         @station = RentalStation.find(params[:id])
-        @vehicles = @station.vehicles
+        @vehicles = @station.vehicles.paginate(page: params[:page], per_page: 6)
+
+        if params[:search].present?
+            search_term = "%#{params[:search].strip}%"
+            @vehicles = @vehicles.where(
+              "LOWER(name) LIKE ? OR LOWER(condition) LIKE ? OR LOWER(available) LIKE ? ", 
+              search_term.downcase, search_term.downcase, search_term.downcase
+            )
+        end
+
+    
+    
+        if params[:condition].present?
+            @vehicles = @vehicles.where(condition: params[:condition])
+        end
+    
+        if params[:status].present?
+            @vehicles = @vehicles.where(available: params[:status])
+        end
+
+
+        if params[:min_price].present? && params[:max_price].present?
+            @vehicles = @vehicles.where(price_per_hour: params[:min_price]..params[:max_price])
+        elsif params[:min_price].present?
+            @vehicles = @vehicles.where("price_per_hour >= ?", params[:min_price])
+        elsif params[:max_price].present?
+            @vehicles = @vehicles.where("price_per_hour <= ?", params[:max_price])
+        end
+
+    
+        @vehicles = @vehicles.order(created_at: :asc)
         
     end
 
@@ -51,10 +82,24 @@ class VehiclesController < ApplicationController
     end
 
 
+    def review
+  @vehicle = Vehicle.find(params[:id])
+  
+  @reviews = Booking.where(vehicle_id: @vehicle.id, status: "completed")
+                   .where.not(vehicle_rating: nil)
+                   .includes(:customer) 
+                   .order(reviewed_at: :desc)
+  
+  
+  @average_rating = @reviews.average(:vehicle_rating).to_f.round(1)
+  @review_count = @reviews.count
+    end
+
+
     private
 
     def vehicle_params
-        params.require(:vehicle).permit(:name, :condition, :image_url, :rental_station_id, :price_per_hour)
+        params.require(:vehicle).permit(:name, :condition, :image_url, :rental_station_id, :price_per_hour,:available)
     end
 
 

@@ -18,8 +18,21 @@
         </li>
 
           <li class="nav-item">
-          
+          <div class="d-flex">
+            
           <%= link_to "Dashboard", dashboard_path, class: "nav-link" %>
+          <% if Current.user && Booking.where(provider_id: Current.user.id, status: "pending").any? %>
+            <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.55rem;margin-left:-0.2rem;"></i>
+
+          <% elsif Current.user && Booking.where(customer_id: Current.user.id, status: "pending").any? %>
+            <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.55rem;margin-left:-0.5rem;"></i>
+
+          <% elsif Current.user && Booking.where(customer_id: Current.user.id, status: "accepted").any? %>
+            <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.55rem;margin-left:-0.5rem;"></i>
+          
+          
+        <% end %>
+        </div>
         </li>
 
        <% else %>
@@ -39,10 +52,7 @@
       
        
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      
     </div>
   </div>
 </nav>
