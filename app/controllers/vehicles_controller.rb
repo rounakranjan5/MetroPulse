@@ -5,7 +5,7 @@ class VehiclesController < ApplicationController
 
     def index 
         @station = RentalStation.find(params[:id])
-        @vehicles = @station.vehicles
+        @vehicles = @station.vehicles.paginate(page: params[:page], per_page: 6)
 
         if params[:search].present?
             search_term = "%#{params[:search].strip}%"

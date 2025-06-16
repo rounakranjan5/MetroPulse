@@ -15,11 +15,13 @@ class DashboardsController < ApplicationController
     end
 
     def rental_stations
-  @rental_stations = RentalStation.where(user_id: Current.user.id)
+  @rental_stations = RentalStation.paginate(page: params[:page], per_page: 6).where(user_id: Current.user.id)
+
     end
 
     def my_vehicles
-      @vehicles = Vehicle.joins(:rental_station).where(rental_stations: { user_id: Current.user.id })
+      @vehicles = Vehicle.paginate(page: params[:page], per_page: 6).joins(:rental_station).where(rental_stations: { user_id: Current.user.id })
+
       @stations = RentalStation.where(user_id: Current.user.id)
 
       if params[:search].present?
@@ -55,9 +57,9 @@ class DashboardsController < ApplicationController
 
   def all_bookings
   if Current.user.role == 'Provider'
-    @bookings = Booking.where(provider_id: Current.user.id)
+    @bookings = Booking.paginate(page: params[:page], per_page: 10).where(provider_id: Current.user.id)
   else
-    @bookings = Booking.where(customer_id: Current.user.id)
+    @bookings = Booking.paginate(page: params[:page], per_page: 10).where(customer_id: Current.user.id)
   end
   
   if params[:search].present?

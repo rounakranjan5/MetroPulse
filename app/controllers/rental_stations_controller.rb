@@ -19,7 +19,9 @@ class RentalStationsController < ApplicationController
   end
 
   def all
-    @rental_stations = RentalStation.all
+    @rental_stations = RentalStation.paginate(page: params[:page], per_page: 10).all
+
+
     
     if params[:search].present?
       search_term = "%#{params[:search].strip}%"
