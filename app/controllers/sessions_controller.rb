@@ -1,5 +1,7 @@
 class SessionsController < MainController
 
+    before_action :redirect_if_authenticated , except: [:destroy]
+
     def new
 
     end
