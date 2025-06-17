@@ -57,7 +57,11 @@ Rails.application.routes.draw do
 
   get "rental_stations/:id/vehicles/review" , to: "vehicles#review", as: "vehicle_reviews"
   get "/rental_stations/:id/review" , to: "rental_stations#review", as: "station_reviews"
+
+  get '/language/:locale', to: 'language#switch', as: 'language_switch'
+
   
 
   root to:"main#index"
 end
+

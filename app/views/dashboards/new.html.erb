@@ -2,22 +2,17 @@
     <div class="row shadow rounded" style="min-height: 300px; background: #ffffff;">
 
         <div class="col-md-4 bg-primary text-white rounded-start d-flex flex-column p-4">
-            <h3 class="mb-4" style="font-weight: 700;">Dashboard Menu</h3>
+            <h3 class="mb-4" style="font-weight: 700;"><%= t('dashboard.dashboard_menu') %></h3>
             <nav class="nav flex-column">
 
                 <% if Current.user.role=='Provider' %>
 
 
 
-                <%= link_to "My Rental Stations" , dashboard_rental_stations_path ,class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" ,style: "background: #0d6efd;"  %>
+                <%= link_to t('dashboard.my_rental_stations'), dashboard_rental_stations_path ,class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" ,style: "background: #0d6efd;"  %>
 
 
-                <%= link_to "My Vehicles", dashboard_my_vehicles_path , class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
-
-
-
-
-                <% else %>
+                <%= link_to t('dashboard.my_vehicles'), dashboard_my_vehicles_path , class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
 
 
 
@@ -25,7 +20,7 @@
                 <% end %>
 
                 <div class=" d-flex hover-bg-light rounded mb-2">
-                    <%= link_to "All Bookings", all_bookings_path, class: "nav-link text-white py-2 px-3  " %>
+                    <%= link_to t('dashboard.all_bookings'), all_bookings_path, class: "nav-link text-white py-2 px-3  " %>
 
                     <% if Current.user && Booking.where(provider_id: Current.user.id, status: "pending").any? %>
                     <i class="fa-solid fa-circle fa-2xs" style="color: #FF0000;margin-top:0.75rem;margin-left:-0.9rem;"></i>
@@ -42,23 +37,23 @@
 
 
 
-                <%= link_to "Rental History" , rental_history_path ,class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" , style: "background: #0d6efd;" %>
+                <%= link_to t('dashboard.rental_history') , rental_history_path ,class: "nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" , style: "background: #0d6efd;" %>
 
-                <%= link_to "Change Password",edit_password_path, class:"nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
+                <%= link_to t('dashboard.change_password'),edit_password_path, class:"nav-link text-white py-2 px-3 rounded mb-2 hover-bg-light" %>
             </nav>
         </div>
 
         <div class="col-md-8 p-5">
-            <h1 class="mb-4" style="color: #343a40; font-weight: 700;">Welcome back, <span style="color:#0d6efd;"><%= Current.user.username if Current.user %> 👋</span></h1>
+            <h1 class="mb-4" style="color: #343a40; font-weight: 700;"><%= t('dashboard.welcome_back') %> <span style="color:#0d6efd;"><%= Current.user.username if Current.user %> 👋</span></h1>
             <p class="lead" style="color: #6c757d;">
-                Here's a quick overview of your activities. Use the menu to navigate through your dashboard.
+                <%= t('dashboard.stats') %>
             </p>
 
             <div class="row mt-4">
                 <div class="col-sm-6 mb-3">
                     <div class="card shadow-sm border-0">
                         <div class="card-body text-center">
-                            <h5 class="card-title">Total Bookings</h5>
+                            <h5 class="card-title"><%= t('dashboard.total_bookings') %></h5>
                             <p class="display-5 text-primary">
                                 <% if @completed_rentals.any? %>
                                 <%= @completed_rentals.count %>
@@ -72,7 +67,7 @@
                 <div class="col-sm-6 mb-3">
                     <div class="card shadow-sm border-0">
                         <div class="card-body text-center">
-                            <h5 class="card-title">Upcoming Bookings</h5>
+                            <h5 class="card-title"><%= t('dashboard.upcoming_bookings') %></h5>
                             <p class="display-5 text-success">
                                 <% if @upcoming_bookings.any? %>
                                 <%= @upcoming_bookings.count %>
@@ -91,9 +86,11 @@
                     <div class="col-sm-6 mb-3">
                         <div class="card shadow-sm border-0">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Your Rating</h5>
+                                <h5 class="card-title"><%= t('dashboard.your_rating') %></h5>
                                 <p class="display-5 text-success">
-                                <% if @average_rating.nil? %>
+                                <% if @completed_rentals.count== 0 %>
+                                0⭐
+                                <% elsif @average_rating.nil? %>
                                 0⭐
                                 <%else%>
                                 <%= @average_rating%>⭐
@@ -107,7 +104,7 @@
                 <div class="col-sm-6 mb-3">
                         <div class="card shadow-sm border-0">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Total Earnings</h5>
+                                <h5 class="card-title"><%= t('dashboard.total_earnings') %></h5>
                                 <p class="display-5 text-success">
                                 <% if @completed_rentals.any? %>
                                 ₹<%= @completed_rentals.sum(:price) %>

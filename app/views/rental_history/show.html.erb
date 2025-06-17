@@ -1,20 +1,20 @@
 
 <div class="container my-5">
-  <h1 class="mb-4">Rental History</h1>
+  <h1 class="mb-4"><%=t('bookings.rental_history')%></h1>
   
   <% if @completed_rentals.any? %>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Vehicle</th>
-            <th>Station</th>
-            <th>Location</th>
-            <th>Booking Date</th>
-            <th>Time Slot</th>
-            <th>Duration</th>
-            <th>Price</th>
-            <th>Completed On</th>
+            <th><%= t('bookings.vehicle') %></th>
+            <th><%= t('bookings.station') %></th>
+            <th><%= t('bookings.location') %></th>
+            <th><%= t('bookings.booking_date') %></th>
+            <th><%= t('bookings.timeslot') %></th>
+            <th><%= t('bookings.duration') %></th>
+            <th><%= t('bookings.price') %></th>
+            <th><%= t('bookings.completedon') %></th>
           </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
     </div>
   <% else %>
     <div class="alert alert-info">
-      <p>You don't have any completed rentals yet.</p>
+      <p><%= t('bookings.no_rentalhistory') %></p>
     </div>
   <% end %>
   

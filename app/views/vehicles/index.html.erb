@@ -1,8 +1,8 @@
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-primary"><%= @station.name %>'s Vehicles</h2>
+    <h2 class="text-primary"><%= @station.name %><%= t('vehicles.particular_vehicle') %></h2>
     <% if @station.user_id == Current.user.id %>
-    <%= link_to "Add Vehicle", new_rental_station_vehicle_path(@station), class: "btn btn-success" %>
+    <%= link_to t('vehicles.add_vehicle'), new_rental_station_vehicle_path(@station), class: "btn btn-success" %>
     <% end %>
   </div>
 
@@ -14,7 +14,7 @@
             <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: "Search by name or condition" %>
+                    <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: t('vehicles.search_placeholder') %>
                 </div>
             </div>
             <div class="col-md-2">
@@ -60,7 +60,7 @@
             
             <div class="col-md-1">
                 <div class="d-grid">
-                    <%= f.submit "Search", class: "btn btn-dark" %>
+                    <%= f.submit t('common.search'), class: "btn btn-dark" %>
                 </div>
             </div>
             <% end %>
@@ -116,7 +116,7 @@
                 <% if vehicle.available && Current.user.role=='Customer' && @station.status=='Active' %>
 
                   <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bookingModal<%= vehicle.id %>">
-                    Book Now
+                    <%= t('common.book_now') %>
                   </button>
 
                   <div class="modal fade" id="bookingModal<%= vehicle.id %>" tabindex="-1" aria-labelledby="bookingModalLabel<%= vehicle.id %>" aria-hidden="true">
@@ -197,7 +197,7 @@
                   <% booking = Booking.find_by(vehicle_id: vehicle.id, status: "pending") %>
                   
                   <% if booking && (booking.provider_id == Current.user.id || booking.customer_id == Current.user.id) %>
-                    <%= button_to "Cancel", cancel_booking_path(booking), method: :post, class: "btn btn-danger btn-sm" %>
+                    <%= button_to t('common.cancel'), cancel_booking_path(booking), method: :post, class: "btn btn-danger btn-sm" %>
                   <% else %>
                     <span class="badge bg-danger">Booked Out</span>
                   <% end %>
@@ -205,24 +205,24 @@
                     <span class="badge bg-danger">Booked Out</span>
                 <% end %>
               </div>
-                <p class="card-text text-muted"><strong>Condition:</strong> <%= vehicle.condition %></p>
-                <p class="card-text text-muted"><strong>Availability Status :</strong>
+                <p class="card-text text-muted"><strong><%= t('vehicles.condition') %> :</strong> <%= vehicle.condition %></p>
+                <p class="card-text text-muted"><strong><%= t('vehicles.availablility_status') %> :</strong>
                  <% if vehicle.available %>
-                  <span class="badge bg-success">Available</span>
+                  <span class="badge bg-success"><%= t('vehicles.available') %></span>
                   <% else %>
-                  <span class="badge bg-danger">Not Available</span>
+                  <span class="badge bg-danger"><%= t('vehicles.not_available') %></span>
                   <% end %>
                  </p>
-                <p class="card-text text-muted"><strong>Price:</strong> <%= vehicle.price_per_hour %>₹/hour</p>
+                <p class="card-text text-muted"><strong><%= t('vehicles.Price') %> : </strong> <%= vehicle.price_per_hour %>₹/hour</p>
 
-                <p class="card-text text-muted"><strong>Average Rating : </strong><%= vehicle.average_rating %>⭐(<%= vehicle.review_count %> reviews)</p>
-                <%= link_to "See All Reviews" ,vehicle_reviews_path(vehicle), class: "btn btn-warning btn-sm" %>
+                <p class="card-text text-muted"><strong><%= t('common.average_rating') %> : </strong><%= vehicle.average_rating %>⭐(<%= vehicle.review_count %> <%= t('common.reviews')%>)</p>
+                <%= link_to t('vehicles.see_all_reviews') ,vehicle_reviews_path(vehicle), class: "btn btn-warning btn-sm" %>
 
               </div>
               <% if @station.user_id == Current.user.id %>
                 <div class="mt-3 d-flex justify-content-between">
-                  <%= link_to "Edit", edit_rental_station_vehicle_path(@station,vehicle), class: "btn btn-primary btn-sm" %>
-                  <%= button_to "Delete", delete_rental_station_vehicle_path(@station,vehicle), method: :delete, class: "btn btn-outline-danger btn-sm" %>
+                  <%= link_to t('common.edit'), edit_rental_station_vehicle_path(@station,vehicle), class: "btn btn-primary btn-sm" %>
+                  <%= button_to t('common.delete'), delete_rental_station_vehicle_path(@station,vehicle), method: :delete, class: "btn btn-outline-danger btn-sm" %>
                 </div>
               <% end %>
             </div>

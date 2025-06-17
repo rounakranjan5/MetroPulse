@@ -1,7 +1,7 @@
 <div class="container py-4">
   <div class="row mb-4">
     <div class="col-md-8">
-      <h2><%= @vehicle.name %> - Reviews</h2>
+      <h2><%= @vehicle.name %> - <%= t('common.reviews') %></h2>
       <div class="d-flex align-items-center mb-2">
         <div class="text-warning me-2">
           <% @average_rating.to_i.times do %>
@@ -14,10 +14,10 @@
             <i class="bi bi-star"></i>
           <% end %>
         </div>
-        <span><strong><%= @average_rating %></strong> out of 5 (<%= @review_count %> reviews)</span>
+        <span><strong><%= @average_rating %></strong> out of 5 (<%= @review_count %> <%=t('common.reviews')%>)</span>
       </div>
       <% station_id = @vehicle.rental_station_id %>
-      <%= link_to "Back to Vehicle", rental_station_vehicles_path(station_id), class: "btn btn-sm btn-outline-dark" %>
+      <%= link_to t('vehicles.back_to_vehicle'), rental_station_vehicles_path(station_id), class: "btn btn-sm btn-outline-dark" %>
     </div>
     <div class="col-md-4 text-md-end">
       <% if @vehicle.image_url.present? %>
@@ -59,7 +59,7 @@
     
   <% else %>
     <div class="alert alert-info">
-      <i class="bi bi-info-circle me-2"></i> No reviews yet for this vehicle.
+      <i class="bi bi-info-circle me-2"></i> <%= t('reviews.no_reviews') %>
     </div>
   <% end %>
 </div>

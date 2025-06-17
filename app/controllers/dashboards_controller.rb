@@ -10,7 +10,9 @@ class DashboardsController < ApplicationController
         @upcoming_bookings = Booking.where(provider_id: Current.user.id, status: "accepted")
         
         @count_completed_rentals = @completed_rentals.count
+        if @count_completed_rentals > 0
         @average_rating=@completed_rentals.average(:vehicle_rating).round(1)
+        end
   
 
     else

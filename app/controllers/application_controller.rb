@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_current_user
+  before_action :set_locale
 
   def set_current_user
         if session[:user_id]
@@ -39,6 +40,26 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
+  private
   
+  def set_locale
+    I18n.locale = extract_locale || I18n.default_locale
+  end
+  
+  def extract_locale
+    # Check for locale in session or cookie first
+    locale_from_params_or_session = params[:locale] || session[:locale] || cookies[:locale]
+    
+    # Only return if it's a valid locale
+    if locale_from_params_or_session && I18n.available_locales.include?(locale_from_params_or_session.to_sym)
+      return locale_from_params_or_session.to_sym
+    end
+    
+    # Optionally, get locale from Accept-Language header
+    # browser_locale = request.env['HTTP_ACCEPT_LANGUAGE']&.scan(/^[a-z]{2}/)&.first&.to_sym
+    # return browser_locale if browser_locale && I18n.available_locales.include?(browser_locale)
+    
+    nil
+  end
 end
+

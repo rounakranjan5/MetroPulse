@@ -1,5 +1,5 @@
 <div class="container my-5">
-  <h1 class="mb-4">All Bookings</h1>
+  <h1 class="mb-4"><%=t('bookings.all_bookings')%></h1>
 
 <div class="card mb-4  border-0">
         <div class="card-body">
@@ -12,7 +12,7 @@
             <div class="col-md-4">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: "Search by vehicle name" %>
+                <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: t('bookings.search_placeholder') %>
               </div>
             </div>
 
@@ -24,15 +24,15 @@
             </div>
 
             <div class="col-md-2">
-              <%= f.number_field :min_price, value: params[:min_price], class: "form-control", placeholder: "Min price" %>
+              <%= f.number_field :min_price, value: params[:min_price], class: "form-control", placeholder: t('bookings.min_price') %>
             </div>
             <div class="col-md-2">
-              <%= f.number_field :max_price, value: params[:max_price], class: "form-control", placeholder: "Max price" %>
+              <%= f.number_field :max_price, value: params[:max_price], class: "form-control", placeholder: t('bookings.max_price') %>
             </div>
 
             <div class="col-md-1">
               <div class="d-grid">
-                <%= f.submit "Search", class: "btn btn-dark" %>
+                <%= f.submit t('common.search'), class: "btn btn-dark" %>
               </div>
             </div>
             <% end %>
@@ -130,15 +130,15 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Vehicle Image</th>
-          <th>Vehicle</th>
-          <th>Station</th>
-          <th>City</th>
-          <th>Status</th>
-          <th>Booking Date</th>
-          <th>Duration</th>
-          <th>Price</th>
-          <th>Actions</th>
+          <th><%=t('bookings.vehicle_image')%></th>
+          <th><%=t('bookings.vehicle')%></th>
+          <th><%=t('bookings.station')%></th>
+          <th><%=t('bookings.city')%></th>
+          <th><%=t('bookings.status')%></th>
+          <th><%=t('bookings.booking_date')%></th>
+          <th><%=t('bookings.duration')%></th>
+          <th><%=t('bookings.price')%></th>
+          <th><%=t('bookings.actions')%></th>
         </tr>
       </thead>
       <tbody>
@@ -187,12 +187,13 @@
                               class: "btn btn-danger btn-sm" %>
 
               <%elsif booking.status=='completed' %>
-              
+              <% if Current.user.role=='Customer' %>
 <% if !booking.reviewed? %>
   <%= link_to "Review", review_booking_path(booking), class: "btn btn-warning btn-sm" %>
 <% elsif booking.reviewed? %>
   <span class="badge bg-success">Reviewed</span>
 <% end %>                
+<%end%>
               <% end %>
             </td>
           </tr>
@@ -200,7 +201,7 @@
       </tbody>
     </table>
   <% else %>
-    <p class="text-muted">No bookings found for this filter.</p>
+    <p class="text-muted"><%=t('bookings.nobookingsmsg')%></p>
   <% end %>
 </div>
 
@@ -270,3 +271,4 @@
   cursor: not-allowed;
 }
 </style>
+

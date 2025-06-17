@@ -1,7 +1,7 @@
 <div class="container py-4">
   <div class="row mb-4">
     <div class="col-md-8">
-      <h2><%= @rental_station.name %> - Reviews</h2>
+      <h2><%= @rental_station.name %> - <%=t('common.reviews')%></h2>
       <p class="text-muted">
         <i class="bi bi-geo-alt-fill"></i> <%= @rental_station.city %>
       </p>
@@ -17,9 +17,9 @@
             <i class="bi bi-star"></i>
           <% end %>
         </div>
-        <span><strong><%= @average_rating %></strong> out of 5 (<%= @review_count %> reviews)</span>
+        <span><strong><%= @average_rating %></strong> out of 5 (<%= @review_count %> <%=t('common.reviews')%>)</span>
       </div>
-      <%= link_to "Back to Station", rental_stations_path, class: "btn btn-sm btn-outline-dark" %>
+      <%= link_to t('rental_stations.back_to_station'), rental_stations_path, class: "btn btn-sm btn-outline-dark" %>
     </div>
     <div class="col-md-4 text-md-end">
       <% if @rental_station.image_url.present? %>
@@ -61,7 +61,7 @@
     
   <% else %>
     <div class="alert alert-info">
-      <i class="bi bi-info-circle me-2"></i> No reviews yet for this rental station.
+      <i class="bi bi-info-circle me-2"></i> <%= t('rental_stations.no_reviews') %>
     </div>
   <% end %>
   

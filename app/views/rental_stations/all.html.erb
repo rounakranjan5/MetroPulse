@@ -1,8 +1,8 @@
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="text-primary">All Rental Stations</h1>
+        <h1 class="text-primary"><%=  t('rental_stations.all_stations') %></h1>
         <% if Current.user && Current.user.role=='Provider'%>
-        <%= link_to "Add New Station", new_rental_station_path, class: "btn btn-success" %>
+        <%= link_to t('rental_stations.add_new_station'), new_rental_station_path, class: "btn btn-success" %>
         <% end %>
     </div>
 
@@ -12,7 +12,7 @@
             <div class="col-md-5">
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: "Search by name, city or type" %>
+                    <%= f.text_field :search, value: params[:search], class: "form-control", placeholder: t('common.search_placeholder') %>
                 </div>
             </div>
             <div class="col-md-2">
@@ -70,7 +70,7 @@
 
             <div class="col-md-1">
                 <div class="d-grid">
-                    <%= f.submit "Search", class: "btn btn-dark" %>
+                    <%= f.submit t('common.search'), class: "btn btn-dark" %>
                 </div>
             </div>
             <% end %>
@@ -115,18 +115,18 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="card-title fw-bold text-dark"><%= station.name %></h5>
-                        <%= link_to "Show Vehicles", rental_station_vehicles_path(station), class: "btn btn-dark btn-sm me-2" %>
+                        <%= link_to t('rental_stations.show_vehicles'), rental_station_vehicles_path(station), class: "btn btn-dark btn-sm me-2" %>
                     </div>
 
-                    <p class="card-text mb-2"><strong>City:</strong> <%= station.city %></p>
-                    <p class="card-text mb-2"><strong>Type:</strong> <%= station.station_type %></p>
-                    <p class="card-text mb-2"><strong>Status:</strong> <span class="badge bg-<%= station.status == 'Active' ? 'success' : 'secondary' %>"><%= station.status %></span></p>
+                    <p class="card-text mb-2"><strong><%=t('common.city')%> :</strong> <%= station.city %></p>
+                    <p class="card-text mb-2"><strong><%=t('common.type')%> :</strong> <%= station.station_type %></p>
+                    <p class="card-text mb-2"><strong><%=t('common.status')%> :</strong> <span class="badge bg-<%= station.status == 'Active' ? 'success' : 'secondary' %>"><%= station.status %></span></p>
 
                     <div class="d-flex justify-content-between mb-3">
-                    <p class="card-text mb-2"><strong>Average Rating:</strong> 
+                    <p class="card-text mb-2"><strong><%=t('common.average_rating')%> :</strong> 
                         <span class="text-muted"> 
                             <% if station.average_rating.present? %>
-                            <%= station.average_rating %>⭐(<%= station.review_count %> reviews )
+                            <%= station.average_rating %>⭐(<%= station.review_count %> <%= t('common.reviews')%> )
                             <% else %>
                             Not Rated
                             <% end %>
@@ -134,7 +134,7 @@
                     </p>
 
 
-                    <%= link_to "View Reviews", station_reviews_path(station), class: "btn btn-warning btn-sm mb-2" %>
+                    <%= link_to t('common.view_reviews'), station_reviews_path(station), class: "btn btn-warning btn-sm mb-2" %>
                     </div>
 
 
@@ -145,8 +145,8 @@
 
 
                         <% if station.user_id == Current.user.id %>
-                        <%= button_to "Delete", rental_station_path(station), method: :delete, class: "btn btn-outline-danger btn-sm" %>
-                        <%= link_to "Edit", edit_rental_station_path(station), class: "btn btn-primary btn-sm me-2" %>
+                        <%= button_to t('common.delete'), rental_station_path(station), method: :delete, class: "btn btn-outline-danger btn-sm" %>
+                        <%= link_to t('common.edit'), edit_rental_station_path(station), class: "btn btn-primary btn-sm me-2" %>
 
 
 

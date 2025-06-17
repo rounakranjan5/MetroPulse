@@ -11,3 +11,4 @@ class RentalHistoryController < ApplicationController
     end
 
 end
+
