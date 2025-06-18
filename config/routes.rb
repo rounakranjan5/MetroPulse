@@ -42,5 +42,26 @@ Rails.application.routes.draw do
 
   get "/dashboard/my_vehicles", to: "dashboards#my_vehicles", as: "dashboard_my_vehicles"
 
+  post "/vehicles/:vehicle_id/bookings", to: "bookings#create", as: "create_vehicle_booking"
+
+  post "/bookings/:id/accept", to: "bookings#accept", as: "accept_booking"
+  post "/bookings/:id/complete", to: "bookings#complete", as: "complete_booking"
+  post "/bookings/:id/cancel", to: "bookings#cancel", as: "cancel_booking"
+
+  get "/dashboard/all_bookings", to: "dashboards#all_bookings", as: "all_bookings"
+
+  get "/dashboard/rental_history" , to: "rental_history#show", as: "rental_history" 
+
+  get "/dashboard/all_bookings/:id/review", to: "dashboards#review", as: "review_booking"
+  post "/dashboard/bookings/:id/review", to: "dashboards#create_review", as: "create_review"
+
+  get "rental_stations/:id/vehicles/review" , to: "vehicles#review", as: "vehicle_reviews"
+  get "/rental_stations/:id/review" , to: "rental_stations#review", as: "station_reviews"
+
+  get '/language/:locale', to: 'language#switch', as: 'language_switch'
+
+  
+
   root to:"main#index"
 end
+

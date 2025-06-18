@@ -10,16 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_105513) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_16_102312) do
   create_table "bookings", force: :cascade do |t|
     t.string "vehicle_type"
     t.integer "duration"
     t.decimal "price"
-    t.date "booking_date"
+    t.datetime "booking_date"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rental_station_id", null: false
+    t.integer "vehicle_id"
+    t.integer "customer_id"
+    t.integer "provider_id"
+    t.string "booking_slot"
+    t.integer "vehicle_rating"
+    t.text "vehicle_review"
+    t.integer "station_rating"
+    t.text "station_review"
+    t.datetime "reviewed_at"
     t.index ["rental_station_id"], name: "index_bookings_on_rental_station_id"
   end
 
@@ -63,6 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_105513) do
     t.datetime "updated_at", null: false
     t.string "image_url"
     t.decimal "price_per_hour"
+    t.boolean "available"
     t.index ["rental_station_id"], name: "index_vehicles_on_rental_station_id"
   end
 
